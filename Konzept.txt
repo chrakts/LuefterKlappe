@@ -1,0 +1,16 @@
+Zustände:
+
+Zustand   Lüfter   Klappe       
+closed    aus      zu  
+opened    aus      offen-L0        
+openL1    L1       offen-L1        
+openL2    L2       offen-L2        
+auto      auto     auto         
+    
+
+L1-Feuchte
+L2-Feuchte
+      
+Nachlaufzeit Klappe
+
+
