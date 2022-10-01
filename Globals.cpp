@@ -15,7 +15,7 @@ char IDNumber[12] EEMEM = "1784324-01";
 char SerialNumber[12] EEMEM = "1958632254";
 char IndexNumber[2] EEMEM = "A";
 
-const char *luefterStatusStrings[5]={"zu","offen-L0","offen-L1","offen-L2","Auto"};
+const char *luefterStatusStrings[9]={"zu","offen-L0","offen-L1","offen-L2","Auto","geschlossen","geoeffnet","schliesst","oeffnet"};
 
 uint16_t actReportBetweenBlocks  = REPORT_BETWEEN_BLOCKS;
 uint16_t actReportBetweenSensors = REPORT_BETWEEN_SENSORS;
@@ -33,6 +33,8 @@ volatile uint8_t u8FlapSetStatus=FLAP_STATUS_CLOSED;
 volatile uint8_t u8FlapSetStatusOld=FLAP_STATUS_UNVALID;
 volatile uint8_t u8FlapActualStatus=FLAP_STATUS_CLOSED;
 volatile uint8_t u8FlapActualStatusOld=FLAP_STATUS_UNVALID;
+volatile uint8_t u8FlapMomentaryStatus=FLAP_STATUS_IS_CLOSED;
+volatile uint8_t u8FlapMomentaryOld=FLAP_STATUS_UNVALID;
 
 volatile double  foldF1Swell,foldF1Hysterese,foldF2Swell,foldF2Hysterese;
 

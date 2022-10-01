@@ -34,3 +34,17 @@
 *.depend
 
 *.layout
+
+bin/Release/LuefterKlappe.elf
+
+bin/Release/LuefterKlappe.hex
+
+bin/Release/LuefterKlappe.lock
+
+bin/Release/LuefterKlappe.lss
+
+bin/Release/LuefterKlappe.map
+
+bin/Release/LuefterKlappe.sig
+
+bin/Release/LuefterKlappe.eep

@@ -12,7 +12,8 @@ void setup()
 {
   init_clock(SYSCLK,PLL,true,CLOCK_CALIBRATION);
   PORTA_DIRCLR = 0xff;
-  PORTA_OUTSET = 0xff;
+  PORTA_DIRSET = 0b00100001;
+  PORTA_OUTSET = 0b11011110;
 
   PORTB_DIRSET = 0xff;  // nicht benutzt
 
@@ -48,11 +49,6 @@ void setup()
 	PORTD_PIN6CTRL = PORT_ISC_FALLING_gc | PORT_OPC_PULLUP_gc | PORT_SRLEN_bm;
 	PORTD_PIN7CTRL = PORT_ISC_FALLING_gc | PORT_OPC_PULLUP_gc | PORT_SRLEN_bm;
 
-  PORTA_INTCTRL = PORT_INT0LVL0_bm; // Low-Level interrupt 0 for PORTA
-	PORTA_INT0MASK = KLAPPE_ES_RECHTS_PIN | KLAPPE_ES_LINKS_PIN;
-	PORTA_PIN0CTRL = PORT_ISC_FALLING_gc | PORT_OPC_PULLUP_gc | PORT_SRLEN_bm;
-	PORTA_PIN1CTRL = PORT_ISC_FALLING_gc | PORT_OPC_PULLUP_gc | PORT_SRLEN_bm;
-
 	PMIC_CTRL = PMIC_LOLVLEX_bm | PMIC_HILVLEN_bm | PMIC_MEDLVLEN_bm;
 	sei();
 
@@ -61,7 +57,6 @@ void setup()
 
 int main(void)
 {
-uint8_t reportStarted = false;
   WDT_Disable();
   setup();
 	cnet.broadcastUInt8((uint8_t) RST.STATUS,'S','0','R');
@@ -69,12 +64,9 @@ uint8_t reportStarted = false;
 	init_mytimer();
 	WDT_EnableAndSetTimeout(WDT_PER_8KCLK_gc);
 	WDT_Reset();
-
-	uint8_t sensorReady=SENSOR_READY;
-
+  initKlappe();
 	WDT_Reset();
 	WDT_EnableAndSetTimeout(WDT_PER_1KCLK_gc);
-
 	while (1)
 	{
     WDT_Reset();
@@ -85,7 +77,37 @@ uint8_t reportStarted = false;
     {
       reportFlapSetStatus(&cnet);
       u8FlapSetStatusOld=u8FlapSetStatus;
-      writeEEData();
+      switch(u8FlapSetStatus)
+      {
+        case FLAP_STATUS_OPENED:
+          openKlappe();
+          LUEFTER_OFF;
+        break;
+        case FLAP_STATUS_CLOSED:
+          LUEFTER_OFF;
+          closeKlappe();
+        break;
+        case FLAP_STATUS_OPENL1:
+          LUEFTER_ON;
+          openKlappe();
+        break;
+        case FLAP_STATUS_OPENL2:
+          openKlappe();
+          LUEFTER_ON;
+        break;
+        default:
+          ;
+      }
+    }
+    if( u8FlapActualStatusOld != u8FlapActualStatus)
+    {
+      reportFlapActualStatus(&cnet);
+      u8FlapActualStatusOld = u8FlapActualStatus;
+    }
+    if( u8FlapMomentaryOld != u8FlapMomentaryStatus)
+    {
+      reportFlapMomentaryStatus(&cnet);
+      u8FlapMomentaryOld = u8FlapMomentaryStatus;
     }
 		// Ermittlung des neuen Lüfterstatus
 		if(u8FlapSetStatus!=FLAP_STATUS_AUTO)
@@ -113,16 +135,9 @@ uint8_t reportStarted = false;
       }*/
     }
     // Falls sich der Lüfterstatus geändert, wird dieser gesendet
-    if( u8FlapActualStatusOld != u8FlapActualStatus)
-    {
-      reportFlapActualStatus(&cnet);
-      u8FlapActualStatusOld=u8FlapActualStatus;
-    }
-
-
 		if( sendStatusReport )
     {
-        char buffer[16];
+        //char buffer[16];
         sendStatusReport = false;
         MyTimers[TIMER_REPORT].value = actReportBetweenSensors;
         MyTimers[TIMER_REPORT].state = TM_START;
@@ -174,7 +189,6 @@ uint8_t reportStarted = false;
                 reportFlapSetStatus(&cnet);
             break;
             case LASTREPORT:
-                LEDGRUEN_OFF;
                 MyTimers[TIMER_REPORT].value = actReportBetweenBlocks;
                 MyTimers[TIMER_REPORT].state = TM_START;
             break;
@@ -220,18 +234,13 @@ void writeEEData()
 
 SIGNAL(PORTD_INT0_vect)
 {
+  LEDROT_ON;
 	MyTimers[TIMER_START_KLAPPETASTE].state = TM_START;
-	LEDROT_ON;
 }
 
 SIGNAL(PORTD_INT1_vect)
 {
+  LEDGRUEN_ON;
 	MyTimers[TIMER_START_LUEFTERTASTE].state = TM_START;
-	LEDGRUEN_ON;
-}
-
-SIGNAL(PORTA_INT0_vect)
-{
-
 }
 

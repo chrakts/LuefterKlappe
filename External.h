@@ -48,6 +48,8 @@ volatile extern double  fF1Swell,fF1Hysterese,fF2Swell,fF2Hysterese;
 volatile extern uint8_t u8FlapSetStatus,u8FlapActualStatus,u8FlapActualStatusOld;
 volatile extern double  foldF1Swell,foldF1Hysterese,foldF2Swell,foldF2Hysterese;
 volatile extern uint8_t u8FlapSetStatusOld;
+volatile extern uint8_t u8FlapMomentaryStatus;
+volatile extern uint8_t u8FlapMomentaryOld;
 
 extern float EEMEM ee_fF1Swell,ee_fF1Hysterese,ee_fF2Swell,ee_fF2Hysterese;
 extern uint8_t EEMEM ee_u8FlapSetStatus;

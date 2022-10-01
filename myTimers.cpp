@@ -46,7 +46,7 @@ void nowSaveEEProm(uint8_t test)
   eeprom_update_float(&ee_fF2Swell,fF2Swell);
   eeprom_update_float(&ee_fF2Hysterese,fF2Hysterese);
   eeprom_update_byte(&ee_u8FlapSetStatus,u8FlapSetStatus);
-  LEDGRUEN_OFF;
+  //LEDGRUEN_OFF;
 }
 
 

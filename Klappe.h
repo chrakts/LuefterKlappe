@@ -6,6 +6,9 @@
 void initKlappe();
 void openKlappe();
 void closeKlappe();
-
+void stopKlappe();
+bool isKlappeOpened();
+bool isKlappeClosed();
+uint8_t getStatusKlappe();
 
 #endif // KLAPPE_H_INCLUDED

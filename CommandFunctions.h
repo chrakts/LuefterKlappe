@@ -40,4 +40,5 @@ void jobWaitAfterLastSensor(ComReceiver *comRec, char function,char address,char
 
 void reportFlapSetStatus(Communication *com);
 void reportFlapActualStatus(Communication *com);
+void reportFlapMomentaryStatus(Communication *com);
 #endif /* COMMANDFUNCTIONS_H_ */

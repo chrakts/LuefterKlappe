@@ -129,8 +129,8 @@ char *temp;
       u8FlapSetStatus = FLAP_STATUS_AUTO;
     break;
 	}
-	reportFlapSetStatus(comRec->Getoutput());
-	u8FlapSetStatusOld = u8FlapSetStatus;
+	//reportFlapSetStatus(comRec->Getoutput());
+	//u8FlapSetStatusOld = u8FlapSetStatus;
 }
 
 void jobSetTimeBetweenBlocks(ComReceiver *comRec, char function,char address,char job, void * pMem)
@@ -159,4 +159,8 @@ void reportFlapSetStatus(Communication *com)
 void reportFlapActualStatus(Communication *com)
 {
   com->sendStandard(luefterStatusStrings[u8FlapActualStatus],BROADCAST,'L','1','a','T');
+}
+void reportFlapMomentaryStatus(Communication *com)
+{
+  com->sendStandard(luefterStatusStrings[u8FlapMomentaryStatus],BROADCAST,'L','1','m','T');
 }
