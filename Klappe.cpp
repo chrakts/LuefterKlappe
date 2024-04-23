@@ -67,17 +67,19 @@ uint8_t getStatusKlappe()
 SIGNAL(PORTA_INT0_vect)
 {
   LEDBLAU_ON;
-  if( (u8FlapMomentaryStatus==FLAP_STATUS_OPENING) && KLAPPE_ES_OPEN_IS_CLEAR  )
+  if( KLAPPE_ES_OPEN_IS_CLEAR ) //(u8FlapMomentaryStatus==FLAP_STATUS_OPENING) &&
   {
     u8FlapMomentaryStatus = FLAP_STATUS_IS_OPENED;
     HBRIDGE_STOP;
     HBRIDGE_SLEEP;
+    LEDROT_ON;
   }
-  if( (u8FlapMomentaryStatus==FLAP_STATUS_CLOSING) && KLAPPE_ES_CLOSE_IS_CLEAR)
+  if( KLAPPE_ES_CLOSE_IS_CLEAR ) //(u8FlapMomentaryStatus==FLAP_STATUS_CLOSING) &&
   {
     u8FlapMomentaryStatus = FLAP_STATUS_IS_CLOSED;
     HBRIDGE_STOP;
     HBRIDGE_SLEEP;
+    LEDROT_OFF;
   }
 
 }

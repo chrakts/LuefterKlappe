@@ -43,7 +43,7 @@ void setup()
   LEDROT_OFF;
   LEDBLAU_OFF;
 
-  PORTD_INTCTRL = PORT_INT0LVL0_bm | PORT_INT1LVL0_bm; // Low-Level interrupt 0 for PORTA
+  PORTD_INTCTRL = PORT_INT0LVL0_bm | PORT_INT1LVL0_bm;
 	PORTD_INT0MASK = KLAPPE_TASTE_PIN;
 	PORTD_INT1MASK = LUEFTER_TASTE_PIN;
 	PORTD_PIN6CTRL = PORT_ISC_FALLING_gc | PORT_OPC_PULLUP_gc | PORT_SRLEN_bm;
@@ -72,7 +72,7 @@ int main(void)
     WDT_Reset();
 		cnetRec.comStateMachine();
 		cnetRec.doJob();
-    // Falls sich der Lüfterstatus geändert, wird dieser gesendet
+    // Falls sich der Klappenstatus geändert, wird dieser gesendet
     if( u8FlapSetStatusOld != u8FlapSetStatus)
     {
       reportFlapSetStatus(&cnet);
@@ -187,6 +187,9 @@ int main(void)
             break;
             case FANSETSTATUSREPORT:
                 reportFlapSetStatus(&cnet);
+            break;
+            case FANMOMENTARYSTATUSREPORT:
+                reportFlapMomentaryStatus(&cnet);
             break;
             case LASTREPORT:
                 MyTimers[TIMER_REPORT].value = actReportBetweenBlocks;

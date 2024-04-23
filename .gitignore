@@ -48,3 +48,7 @@ bin/Release/LuefterKlappe.map
 bin/Release/LuefterKlappe.sig
 
 bin/Release/LuefterKlappe.eep
+
+-ffunction-sections
+
+*.cscope_file_list
